@@ -3,8 +3,10 @@ package com.example.democrud.service;
 import com.example.democrud.application.dai.ProductRepository;
 import com.example.democrud.controller.ApiExceptionHandler;
 import com.example.democrud.infrastructure.repository.database.DatabaseProductRepository;
+import com.example.democrud.input.InsertProductInput;
 import com.example.democrud.input.SearchProductInput;
 import com.example.democrud.model.ErrorMessage;
+import com.example.democrud.model.InsertProductParam;
 import com.example.democrud.model.Product;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -32,37 +34,34 @@ public class ProductService {
      * @return List<Product>
      */
     public List<Product> searchProducts(SearchProductInput input) {
-        int sizeOfPage = input.getLimit();
-        if (sizeOfPage < 1) {
-            sizeOfPage = 10;
+        int limit = input.getLimit();
+        if (limit < 1) {
+            limit = 10;
         }
 
-        String orderBy = standardOrder(inputOrder);
-        String sortType = selectTypeSort(inputTypeSort);
+        String orderBy = standardOrder(input.getOrderBy());
+        String sortType = selectTypeSort(input.getSortBy());
         String order = orderBy + " " + sortType;
 
-        int totalItem = databaseProductRepository.countItems(keyword);
+        int totalItem = databaseProductRepository.countItems(input.getKeyword());
         int totalPage;
 
-        if (totalItem % sizeOfPage == 0) {
-            totalPage = totalItem / sizeOfPage;
+        if (totalItem % limit == 0) {
+            totalPage = totalItem / limit;
         } else {
-            totalPage = totalItem / sizeOfPage + 1;
+            totalPage = totalItem / limit + 1;
         }
 
-        if (pageIndex > totalPage) {
-            pageIndex = totalPage;
+        int page = input.getPage();
+        if (page > totalPage) {
+            page = totalPage;
         }
-        if (pageIndex < 1) {
-            pageIndex = 1;
+        if (page < 1) {
+            page = 1;
         }
-        int offset = (pageIndex - 1) * sizeOfPage;
+        int offset = (page - 1) * limit;
 
-        List<Product> list = databaseProductRepository.searchProducts(keyword, order, sizeOfPage, offset);
-        if (CollectionUtils.isEmpty(list)) {
-            throw new ErrorMessage(404, "Product Not Found!");
-        }
-        return list;
+        return databaseProductRepository.searchProducts(input.getKeyword(), order, limit, offset);
     }
 
     public Product findProductById(int id) {
@@ -73,7 +72,7 @@ public class ProductService {
         return product;
     }
 
-    public void saveProduct(Product product) {
+    public void saveProduct(InsertProductInput product) {
         if (!product.getName().matches(NAME_PATTERN)) {
             throw new ErrorMessage(500, "Internal Server Error");
         }
@@ -112,6 +111,10 @@ public class ProductService {
             return input;
         }
         return "asc";
+    }
+
+    public <T> Object convert(Object input, Class<T> param) {
+        return null;
     }
 
 }

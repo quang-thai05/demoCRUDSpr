@@ -9,16 +9,12 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SearchProductInput {
+public class InsertProductInput {
 
-    private String keyword;
+    private String name;
 
-    private String orderBy;
+    private String description;
 
-    private String sortBy;
-
-    private int page;
-
-    private int limit;
+    private String orgId;
 
 }

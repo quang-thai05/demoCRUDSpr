@@ -1,6 +1,7 @@
 package com.example.democrud.infrastructure.repository.database;
 
 import com.example.democrud.application.dai.ProductRepository;
+import com.example.democrud.model.InsertProductParam;
 import com.example.democrud.model.Product;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
@@ -23,7 +24,7 @@ public interface DatabaseProductRepository extends ProductRepository {
     Product findProductById(@Param("id") Integer id);
 
     @Override
-    void saveProduct(@Param("product") Product product);
+    void saveProduct(@Param("product") InsertProductParam product);
 
     @Override
     void updateProductInfo(@Param("id") int id, @Param("product") Product product);

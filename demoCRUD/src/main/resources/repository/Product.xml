@@ -37,6 +37,15 @@
         </association>
     </resultMap>
 
+    <select id="countItems" resultType="int">
+        SELECT COUNT(*)
+        FROM product
+        WHERE (`name` like CONCAT('%', #{keyword}, '%')
+            OR `description` like CONCAT('%', #{keyword}, '%'))
+          AND `delete_flag` = 0
+          AND `active_flag` = 1
+    </select>
+
     <select id="searchProducts" resultMap="productResultMap">
         SELECT id,
                `name`,
