@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.democrud.infrastructure.repository.database.DatabaseProductRepository">
+
+    <resultMap id="productResultMap" type="com.example.democrud.model.Product">
+        <association property="id" javaType="java.lang.Integer">
+            <result column="id"/>
+        </association>
+        <association property="name" javaType="java.lang.String">
+            <result column="name"/>
+        </association>
+        <association property="description" javaType="java.lang.String">
+            <result column="description"/>
+        </association>
+        <association property="orgId" javaType="java.lang.String">
+            <result column="org_id"/>
+        </association>
+        <association property="createdBy" javaType="java.lang.String">
+            <result column="created_by"/>
+        </association>
+        <association property="createdDate" javaType="java.lang.Long">
+            <result column="created_date"/>
+        </association>
+        <association property="lastModifiedBy" javaType="java.lang.String">
+            <result column="last_modified_by"/>
+        </association>
+        <association property="lastModifiedDate" javaType="java.lang.Long">
+            <result column="last_modified_date"/>
+        </association>
+        <association property="activeFlag" javaType="java.lang.Boolean">
+            <result column="active_flag"/>
+        </association>
+        <association property="deleteFlag" javaType="java.lang.Boolean">
+            <result column="delete_flag"/>
+        </association>
+    </resultMap>
+
+    <select id="searchProducts" resultMap="productResultMap">
+        SELECT id,
+               `name`,
+               `description`,
+               org_id,
+               created_by,
+               created_date,
+               last_modified_by,
+               last_modified_date,
+               active_flag,
+               delete_flag
+        FROM product
+        WHERE (`name` like CONCAT('%', #{keyword}, '%')
+          OR `description` like CONCAT('%', #{keyword}, '%'))
+          AND `delete_flag` = 0
+          AND `active_flag` = 1
+        ORDER BY ${order}
+        LIMIT #{sizeOfPage} OFFSET #{offset};
+    </select>
+
+    <select id="findProductById" resultMap="productResultMap">
+        SELECT id,
+               `name`,
+               `description`,
+               org_id,
+               created_by,
+               created_date,
+               last_modified_by,
+               last_modified_date,
+               active_flag,
+               delete_flag
+        FROM product
+        WHERE id = #{id};
+    </select>
+
+    <insert id="saveProduct" parameterType="com.example.democrud.model.Product">
+        INSERT INTO product
+        (name,
+         description,
+         org_id,
+         created_by,
+         created_date,
+         last_modified_by,
+         last_modified_date,
+         active_flag,
+         delete_flag)
+        VALUES (#{product.name},
+                #{product.description},
+                #{product.orgId},
+                #{product.createdBy},
+                #{product.createdDate},
+                #{product.lastModifiedBy},
+                #{product.lastModifiedDate},
+                #{product.activeFlag},
+                #{product.deleteFlag});
+    </insert>
+
+    <update id="updateProductInfo">
+        UPDATE `product`
+        SET `name`             = #{product.name},
+            `description`      = #{product.description},
+            `org_id`            = #{product.orgId},
+            `created_by`        = #{product.createdBy},
+            `created_date`      = #{product.createdDate},
+            `last_modified_by`   = #{product.lastModifiedBy},
+            `last_modified_date` = #{product.lastModifiedDate},
+            `active_flag`       = #{product.activeFlag},
+            `delete_flag`       = #{product.deleteFlag}
+        WHERE `id` = #{id};
+    </update>
+
+    <delete id="deleteProduct">
+        DELETE
+        FROM `product`
+        WHERE id = #{id};
+    </delete>
+</mapper>

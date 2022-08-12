@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="20221208151900" author="thai.dinhquang">
+
+        <dropNotNullConstraint columnDataType="varchar(255)" columnName="description" tableName="product"/>
+
+        <renameColumn columnDataType="varchar(255)" newColumnName="org_id" oldColumnName="orgId" tableName="product"/>
+        <renameColumn columnDataType="varchar(255)" newColumnName="created_by" oldColumnName="createdBy" tableName="product"/>
+        <renameColumn columnDataType="bigint" tableName="product" oldColumnName="createdDate" newColumnName="created_date"/>
+        <renameColumn columnDataType="bigint" tableName="product" oldColumnName="lastModifiedDate" newColumnName="last_modified_date"/>
+        <renameColumn columnDataType="varchar(255)" tableName="product" oldColumnName="lastModifiedBy" newColumnName="last_modified_by"/>
+        <renameColumn columnDataType="bit(1)" tableName="product" oldColumnName="activeFlag" newColumnName="active_flag"/>
+        <renameColumn columnDataType="bit(1)" tableName="product" oldColumnName="deleteFlag" newColumnName="delete_flag"/>
+
+    </changeSet>
+
+</databaseChangeLog>
+

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="20220530164100" author="thai.dinhquang">
+
+        <createTable tableName="product">
+            <column name="id" type="int"/>
+            <column name="name" type="nvarchar(225)"/>
+            <column name="description" type="nvarchar(225)"/>
+            <column name="orgId" type="nvarchar(225)"/>
+            <column name="createdBy" type="nvarchar(225)"/>
+            <column name="createdDate" type="bigint"/>
+            <column name="lastModifiedBy" type="nvarchar(225)"/>
+            <column name="lastModifiedDate" type="bigint"/>
+            <column name="activeFlag" type="bit(1)"/>
+            <column name="deleteFlag" type="bit(1)"/>
+        </createTable>
+
+        <addPrimaryKey tableName="product" columnNames="id"/>
+        <addAutoIncrement columnDataType="int" tableName="product" columnName="id"/>
+
+        <addNotNullConstraint tableName="product" columnName="name" columnDataType="nvarchar(225)"/>
+        <addNotNullConstraint tableName="product" columnName="description" columnDataType="nvarchar(225)"/>
+        <addNotNullConstraint tableName="product" columnName="orgId" columnDataType="nvarchar(225)"/>
+        <addNotNullConstraint tableName="product" columnName="createdBy" columnDataType="nvarchar(225)"/>
+        <addNotNullConstraint tableName="product" columnName="createdDate" columnDataType="bigint"/>
+        <addNotNullConstraint tableName="product" columnName="lastModifiedDate" columnDataType="bigint"/>
+        <addNotNullConstraint tableName="product" columnName="lastModifiedBy" columnDataType="nvarchar(225)"/>
+
+        <addDefaultValue tableName="product" columnName="activeFlag" defaultValueNumeric="1"/>
+        <addDefaultValue tableName="product" columnName="deleteFlag" defaultValueNumeric="0"/>
+
+    </changeSet>
+
+</databaseChangeLog>
+
