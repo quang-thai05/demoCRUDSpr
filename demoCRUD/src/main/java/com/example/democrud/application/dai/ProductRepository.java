@@ -1,5 +1,6 @@
 package com.example.democrud.application.dai;
 
+import com.example.democrud.input.InsertProductInput;
 import com.example.democrud.model.InsertProductParam;
 import com.example.democrud.model.Product;
 
@@ -13,7 +14,7 @@ public interface ProductRepository {
 
     Product findProductById(Integer id);
 
-    void saveProduct(InsertProductParam product);
+    void saveProduct(InsertProductInput product);
 
     void updateProductInfo(int id, Product product);
 
