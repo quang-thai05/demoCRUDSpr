@@ -15,15 +15,19 @@ import org.springframework.stereotype.Service;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Field;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 @Transactional
 @Service("ApplicationProductService")
 public class ProductService {
     private final DatabaseProductRepository databaseProductRepository;
-    private static final String NAME_PATTERN = "^[a-zA-Z]+$";
+    private static final String NAME_PATTERN = "^[a-zA-Z\\s]+$";
 
     public ProductService(@Qualifier("DatabaseProductRepository") DatabaseProductRepository databaseProductRepository) {
         this.databaseProductRepository = databaseProductRepository;
@@ -76,8 +80,13 @@ public class ProductService {
         if (!product.getName().matches(NAME_PATTERN)) {
             throw new ErrorMessage(500, "Internal Server Error");
         }
+        product.setCreatedBy("thai.dinhquang");
+        product.setCreatedDate(14082022);
+        product.setLastModifiedBy("thai.dinhquang");
+        product.setLastModifiedDate(14082022);
+        product.setActiveFlag(true);
+        product.setDeleteFlag(false);
         databaseProductRepository.saveProduct(product);
-
     }
 
     public void updateProductInfo(int id, Product product) {
@@ -85,7 +94,6 @@ public class ProductService {
             throw new ErrorMessage(500, "Internal Server Error");
         }
         databaseProductRepository.updateProductInfo(id, product);
-
     }
 
     public void deleteProduct(int id) {
@@ -93,7 +101,7 @@ public class ProductService {
     }
 
     public String standardOrder(String input) {
-        if (StringUtils.isBlank(input)) {
+        if (StringUtils.isEmpty(input)) {
             return "id";
         }
         switch (input) {
@@ -113,8 +121,15 @@ public class ProductService {
         return "asc";
     }
 
-    public <T> Object convert(Object input, Class<T> param) {
-        return null;
+    public <T> Object convertParamToInput(Class<T> param, Object input) throws ClassNotFoundException, IllegalAccessException {
+//        input = (Class<?>) Class.forName(input.getClass().toString());
+//        Field[] fields = ((Class<?>) input).getFields();
+        Field[] fields = input.getClass().getFields();
+        for (Field field : fields) {
+            field.setAccessible(true);
+            field.set(input, param);
+        }
+        return input;
     }
 
 }

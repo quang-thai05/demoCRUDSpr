@@ -17,4 +17,16 @@ public class InsertProductInput {
 
     private String orgId;
 
+    private String createdBy;
+
+    private long createdDate;
+
+    private String lastModifiedBy;
+
+    private long lastModifiedDate;
+
+    private boolean activeFlag;
+
+    private boolean deleteFlag;
+
 }
