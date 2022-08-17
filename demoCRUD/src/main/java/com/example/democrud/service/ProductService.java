@@ -120,16 +120,4 @@ public class ProductService {
         }
         return "asc";
     }
-
-    public <T> Object convertParamToInput(T param, Object input) throws ClassNotFoundException, IllegalAccessException {
-//        input = (Class<?>) Class.forName(input.getClass().toString());
-//        Field[] fields = ((Class<?>) input).getFields();
-        Field[] fields = input.getClass().getFields();
-        for (Field field : fields) {
-            field.setAccessible(true);
-            field.set(input, param);
-        }
-        return input;
-    }
-
 }
